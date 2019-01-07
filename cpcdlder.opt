@@ -1,0 +1,44 @@
+
+# obligatoire!
+user=utilisateur
+password=motdepasseutilisateur
+
+
+# img ou pdf
+ouput_type="img"
+# taille de la police dans l'export généré
+font_size="28"
+
+# pour le format img: largeur de l'image
+img_width="800"
+
+# pour le format pdf
+# largeur de la page
+pdf_page_width="10cm"
+# marge du bas
+pdf_margin_bottom="0"
+# marge du haut
+pdf_margin_top="0"
+# marge gauche
+pdf_margin_left="0"
+# marge droite
+pdf_margin_right="0"
+# marge simpson
+#        (                          )
+#         \                        /
+#        ,' ,__,___,__,-._         )
+#        )-' ,    ,  , , (        /
+#        ;'"-^-.,-''"""\' \       )
+#       (      (        ) /  __  /
+#        \o,----.  o  _,'( ,.^. \
+#        ,'`.__  `---'    `\ \ \ \_
+# ,.,. ,'                   \    ' )
+# \ \ \\__  ,------------.  /     /
+#( \ \ \( `---.-`-^--,-,--\:     :
+# \       (   (""""""`----'|     :
+#  \   `.  \   `.          |      \
+#   \   ;  ;     )      __ _\      \
+#   /     /    ,-.,-.'"Y  Y  \      `.
+#  /     :    ,`-'`-'`-'`-'`-'\       `.
+# /      ;  ,'  /              \        `
+#/      / ,'   /                \

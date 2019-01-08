@@ -37,15 +37,14 @@ echo 'disques la merveillosité canardesque'
 echo '##############################################################'
 echo ''
 
-# A POSIX variable
-OPTIND=1         # Reset in case getopts has been used previously in the shell.
-
 # Init des variables par defaut:
 user=""
 password=""
 ouput_type="img"
 verbose=0
 debug=0
+debug_path="./debug/"
+output_path="./"
 slowdown=0
 font_size="28"
 img_width="800"
@@ -60,7 +59,7 @@ if [ -f ./cpcdlder.opt ]; then
   source ./cpcdlder.opt
 fi
 
-while getopts "upt:vdsh" opt; do
+while getopts "u:p:t:D:O:vdsh" opt; do
   case "$opt" in
   h)
     show_help
@@ -70,7 +69,7 @@ while getopts "upt:vdsh" opt; do
     verbose=1
     ;;
   t)
-    output_file=$OPTARG
+    ouput_type=$OPTARG
     ;;
   u)
     user=$OPTARG
@@ -82,25 +81,29 @@ while getopts "upt:vdsh" opt; do
     debug=1
     verbose=1
     ;;
+  D)
+    debug_path=$OPTARG
+    ;;
+  O)
+    output_path=$OPTARG
+    ;;
   s)
     slowdown=$((slowdown + 1))
     ;;
   esac
 done
 
-shift $((OPTIND-1))
-
-[ "${1:-}" = "--" ] && shift
-
 function show_help()
 {
   echo "
 Utilisation:
-cpcdlder -u user -p password [-t output_type] [-v] [-d] [-s]+
+cpcdlder -u user -p password [-O output_path] [-D debug_path] [-t output_type] [-v] [-d] [-s]+
 
 user: compte utilisateur du site cpc
 password: mot de passe du compte
 output_type: img ou pdf
+O: output_path, chemin ou seront depose les fichiers img ou pdf
+D: chemin ou seront pose les fichiers de debug (fichiers intermediaires)
 v: verbose
 d: pdebug (on garde les fichiers temporaires + verbose)
 s: pause d'1s entre chaques articles telecharge (repetable)
@@ -134,6 +137,14 @@ if [[ -z "${user}" || -z "${password}" ]]; then
   perror "Pas d'utilisateur ou de password renseignés"
   show_help
   exit
+fi
+
+# Creation des dossiers de debug et output s'ils n'existent pas.
+if [ $debug ] ||  [ ! -d $debug_path ]; then
+  mkdir -p $debug_path
+fi
+if [ ! -d $output_path ]; then
+  mkdir -p $output_path
 fi
 
 # On récupère un token d'authentification auprès du serveur
@@ -239,7 +250,7 @@ for numero in $numeros; do
       pinfo "export en format image de l'article"
       wkhtmltoimage --width ${img_width} \
                     --minimum-font-size ${font_size} \
-                    export.html ${article//\//_}.jpg
+                    export.html ${output_path}${article//\//_}.jpg
     fi
     if [[ "$ouput_type" == "pdf" ]]; then
       pinfo "export en format pdf de l'article"
@@ -249,11 +260,11 @@ for numero in $numeros; do
                   --margin-left ${pdf_margin_left}  \
                   --margin-right ${pdf_margin_right} \
                   --page-width ${pdf_page_width} \
-                  export.html ${article//\//_}.pdf
+                  export.html ${output_path}${article//\//_}.pdf
     fi
     if [ $debug ]; then
       pdebug "4.4) export html sauvegarde dans debug_${article//\//_}.html"
-      mv export.html debug${article//\//_}.html
+      mv export.html ${debug_path}debug${article//\//_}.html
     else
       rm export.html
       rm ${raw_article_output}
@@ -266,10 +277,14 @@ for numero in $numeros; do
 
   if [ ! $debug ]; then
     rm raw_$numero.html
+  else
+    mv raw_$numero.html ${debug_path}raw_$numero.html
   fi
 done
 
 if [ ! $debug ]; then
   rm raw_numeros.html
+else
+  mv raw_numeros.html ${debug_path}raw_numeros.html
 fi
 exit 0

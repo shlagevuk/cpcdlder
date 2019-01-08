@@ -9,6 +9,8 @@ cpcdownloader est un petit script permettant de scrapper les numeros de canardpc
 - user: compte utilisateur du site cpc
 - password: mot de passe du compte
 - output_type: img ou pdf
+- O: output_path, chemin ou seront depose les fichiers img ou pdf
+- D: chemin ou seront pose les fichiers de debug (fichiers intermediaires)
 - v: verbose
 - d: pdebug (on garde les fichiers temporaires + verbose)
 - s: pause d'1s entre chaques articles telecharge (repetable)

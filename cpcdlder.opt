@@ -8,6 +8,11 @@ password=motdepasseutilisateur
 ouput_type="img"
 # taille de la police dans l'export généré
 font_size="28"
+# Emplacement des fichiers de "debug"
+debug_path="./"
+# Emplacement des fichiers de d'export
+output_path="./"
+
 
 # pour le format img: largeur de l'image
 img_width="800"

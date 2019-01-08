@@ -239,11 +239,14 @@ for numero in $numeros; do
     # On passe les tag "liens" avec une image en fond en image directement
     # Les images sont configuré pour que leur largeur corresponde a celle de la page
     # Etant dans une div le padding du css est ajoute
-    sed -i -r "/slideshow/ s/<a/<div style=\"width: ${img_width}\"> <img/; s/href/src/; s/title=\".*\" style=\"background-image: url(.*);\">/style=\"max-width: 100%;vertical-align: middle;\" >/; s/<\/a>/<\/div>/" export.html
+    sed -i -r "/slideshow/ s/<a/<div style=\"width: ${img_width}\"> <img/; s/href/src/; s/title=\".*\".+style=\"background-image: url(.*);\">/style=\"max-width: 100%;vertical-align: middle;\" >/; s/<\/a>/<\/div>/" export.html
 
     # On remplace les liens relatifs vers CPC pour le chemin des images en local
     # ex: /mon/images.jpg -> ./www.canardpc.com/mon/images.jpg
     sed -i -r '/slideshow/ s/([^m])\/sites\//\1.\/www.canardpc.com\/sites\//g' export.html
+
+    # Dans certains cas on a des url très longues, on ajoute le style pour les obliger a faire un retour a la ligne
+    sed -i -r 's/<a src=/<a style="word-wrap: break-word;" src=/' export.html
 
     # Generation des exports img ou pdf
     if [[ "$ouput_type" == "img" ]]; then
